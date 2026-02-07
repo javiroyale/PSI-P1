@@ -20,7 +20,7 @@ def index(request):
 
     num_horror_genres = Genre.objects.filter(name__icontains='horror').count()
 
-    num_cementerio_books = Book.objects.filter(title__icontains='cementerio').count()
+    num_a_books = Book.objects.filter(title__icontains='a').count()
 
     context = {
         'num_books': num_books,
@@ -28,7 +28,7 @@ def index(request):
         'num_instances_available': num_instances_available,
         'num_authors': num_authors,
         'num_horror_genres': num_horror_genres,
-        'num_cementerio_books': num_cementerio_books,
+        'num_a_books': num_a_books,
     }
 
     # Render the HTML template index.html 
@@ -37,7 +37,14 @@ def index(request):
 
 class BookListView(generic.ListView):
     model = Book
-    paginate_by=10
+    paginate_by=3
     
 class BookDetailView(generic.DetailView):
     model = Book
+
+class AuthorListView(generic.ListView):
+    model = Author
+    paginate_by=2
+    
+class AuthorDetailView(generic.DetailView):
+    model = Author
