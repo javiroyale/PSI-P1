@@ -1,0 +1,6 @@
+.frontlist {
+    list-style-type: decimal;
+    ::marker { 
+      color: red;
+    }
+}

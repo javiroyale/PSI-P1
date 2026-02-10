@@ -12,14 +12,14 @@
   </p>
   <h2>Dynamic content</h2>
   <p>The library has the following record counts:</p>
-  <ul>
+  <ol class = 'frontlist'>
     <li><strong>Books:</strong> {{ num_books }}</li>
     <li><strong>Copies:</strong> {{ num_instances }}</li>
     <li><strong>Copies available:</strong> {{ num_instances_available }}</li>
     <li><strong>Authors:</strong> {{ num_authors }}</li>
     <li><strong>Horror Genres:</strong> {{ num_horror_genres }}</li>
     <li><strong>Books containing the letter 'a' in the title:</strong> {{ num_a_books }}</li>
-  </ul>
+  </ol>
   <p>
     You have visited this page {{ num_visits }} time{{ num_visits|pluralize }}.
   </p>
