@@ -1,6 +1,46 @@
 .frontlist {
-    list-style-type: decimal;
-    ::marker { 
-      color: red;
-    }
+    list-style: none;
+    counter-reset: item;
+    padding-left: 0;
+}
+
+.frontlist li {
+    counter-increment: item;
+    display: flex;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.frontlist li::before {
+    content: counter(item);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    margin-right: 12px;
+
+    background-color: #4f46e5; 
+    color: white;              
+    font-weight: bold;      
+}
+
+.btn-logout{
+  background-color: rgb(146, 146, 203);
+  color: rgb(0, 0, 0);
+  font-size: 15px;
+  padding: 12px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.btn-login{
+  background-color: rgb(137, 242, 131);
+  color: rgb(0, 0, 0);
+  font-size: 15px;
+  padding: 12px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
 }

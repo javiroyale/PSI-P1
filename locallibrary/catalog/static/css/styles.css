@@ -11,3 +11,11 @@
   padding: 0;
   margin: 0;
 }
+
+#login-form {
+  display: inline;
+}
+#login-form button {
+  padding: 0;
+  margin: 0;
+}
