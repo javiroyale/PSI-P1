@@ -16,9 +16,6 @@ import os
 from dotenv import load_dotenv
 
 POSTGRESQL_URL = 'postgres://alumnodb:alumnodb@localhost:5432/psi'
-NEON_URL = 'postgresql://neondb_owner:npg_BV7qmftMLdk0@ep-quiet-truth'
-'-aisajy2o-pooler.c-4.us-east-1.aws.'
-'neon.tech/psi?sslmode=require&channel_binding=require'
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -38,7 +35,13 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 
 DEBUG = os.getenv('DEBUG', '0').lower() in ['true', 't', '1']
 
-ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', '127.0.0.1').split(' ')
+# ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', '127.0.0.1').split(' ')
+
+ALLOWED_HOSTS = [
+    ".onrender.com",
+    "localhost",
+    "127.0.0.1",
+]
 
 # ALLOWED_HOSTS = []
 
@@ -98,17 +101,19 @@ WSGI_APPLICATION = 'locallibrary.wsgi.application'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
+    "default": {}
 }
 
-db_from_env = dj_database_url.config(
-    default='postgres://alumnodb:alumnodb@localhost:5432/psi',
-    conn_max_age=500)
-
-DATABASES['default'].update(db_from_env)
+if "TESTING" in os.environ:
+    DATABASES["default"] = dj_database_url.config(
+        default=os.getenv("POSTGRESQL_URL"),
+        conn_max_age=500,
+    )
+else:
+    DATABASES["default"] = dj_database_url.config(
+        default=os.getenv("NEON_URL"),
+        conn_max_age=500,
+    )
 
 
 # Password validation
@@ -188,16 +193,8 @@ STORAGES = {
     },
 }
 
-DEFAULT_FILE_STORAGE = 'django.core.files.storage.FileSystemStorage'
+STATICFILES_STORAGE = (
+    "whitenoise.storage.CompressedManifestStaticFilesStorage"
+)
 
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestSta3cFilesStorage'
-
-# To use local PostgreSQL and run the tests, just export TESTING=1
-# To use NEON, just unset TESTING
-# To see the current value of TESTING just type echo $TESTING
-if 'TESTING' in os.environ:
-    db_from_env = dj_database_url.config(default=POSTGRESQL_URL,
-                                         conn_max_age=500)
-else:
-    db_from_env = dj_database_url.config(default=NEON_URL,
-                                         conn_max_age=500)
+DEFAULT_FILE_STORAGE = "django.core.files.storage.FileSystemStorage"
