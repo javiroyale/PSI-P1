@@ -30,24 +30,22 @@
                 <li>
                   <form id="logout-form" method="post" action="{% url 'logout' %}">
                     {% csrf_token %}
-                    <button type="submit" class="btn-logout">Logout</button>
+                    <button type="submit" class="btn-logout">Logout </button></li>
                   </form>
-                </li>
+                
               {% else %}
-                <li>
+                  <li>
                   <form id="login-form" method="get" action="{% url 'login' %}?next={{ request.path }}">
                     {% csrf_token %}
-                    <button type="submit" class="btn-login">Login</button>
+                  <button type="submit" class="btn-login">Login </button></li>
                   </form>
-                </li>
+                
               {% endif %}
             </ul>
-            {% if perms.catalog.view_all %}
               {% if perms.catalog.can_mark_returned %}
                 <li>Staff</li>
                 <li><a href="{% url 'all-borrowed' %}">All Borrowed</a></li>
               {% endif %}
-            {% endif %}
             {% if user.is_staff %}
               <hr>
                 <ul class="sidebar-nav">

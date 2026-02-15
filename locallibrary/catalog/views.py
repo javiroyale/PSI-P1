@@ -85,7 +85,7 @@ class LoanedBooksByUserListView(LoginRequiredMixin,generic.ListView):
 
 class BorrowedBooksListView(PermissionRequiredMixin, generic.ListView):
     model=BookInstance
-    permission_required=('catalog.view_all', 'catalog.can_mark_returned')
+    permission_required=('catalog.can_mark_returned')
     paginate_by=10
     template_name='catalog/borrowed_books_list_for_librarians.html'
 

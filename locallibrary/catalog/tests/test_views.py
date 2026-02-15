@@ -180,8 +180,6 @@ class RenewBookInstancesViewTest(TestCase):
         # Give test_user2 permission to renew books.
         permission = Permission.objects.get(name='Set book as returned')
         test_user2.user_permissions.add(permission)
-        # Le damos los permisos de poder ver los libros prestados también
-        permission = Permission.objects.get(name='View a list of all the borrewed books')
         test_user2.user_permissions.add(permission)
         test_user2.save()
 
@@ -307,6 +305,10 @@ class AuthorCreateViewTest(TestCase):
         test_user.user_permissions.add(permAddAuthor)
         test_user.save() 
 
+        testuser1 = User.objects.create_user(
+            username='testuser1', password='123')
+        testuser1.save() 
+
 
 
 
@@ -361,18 +363,54 @@ class AuthorCreateViewTest(TestCase):
         self.assertEqual(response.status_code, 403)
         self.assertFalse(Author.objects.filter(first_name='Autor ilegal').exists())
 
-    def test_view_url_exists_at_desired_location(self):
+    def test_url_exists_at_desired_location(self):
         self.client.login(username='test_user', password='some_password')
         response = self.client.get('/catalog/author/create/')
         self.assertEqual(response.status_code, 200)
 
-    def test_view_url_accessible_by_name(self):
+    def test_url_accessible_by_name(self):
         self.client.login(username='test_user', password='some_password')
         response = self.client.get(reverse('author-create'))
         self.assertEqual(response.status_code, 200)
 
-    def test_view_uses_correct_template(self):
+    def test_uses_correct_template(self):
         self.client.login(username='test_user', password='some_password')
         response = self.client.get(reverse('author-create'))
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'catalog/author_form.html')
+    
+    def test_redirect_if_not_logged_in(self):
+        response = self.client.get(reverse('author-create'))
+        self.assertEqual(response.status_code, 302)
+        self.assertTrue(response.url.startswith('/accounts/login/'))
+    
+    def test_forbidden_if_logged_in_but_not_correct_permission(self):
+        self.client.login(username='testuser1', password='123')
+        response = self.client.get(reverse('author-create'))
+        self.assertEqual(response.status_code, 403)
+    
+    def test_logged_in_with_permission(self):
+        self.client.login(username='test_user', password='some_password')
+        response = self.client.get(reverse('author-create'))
+        self.assertEqual(response.status_code, 200)
+    
+    def test_form_date_of_death_initially_set_to_expected_date(self):
+        self.client.login(username='test_user', password='some_password')
+        response = self.client.get(reverse('author-create'))
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.context['form'].initial.get('date_of_death'), '11/11/2023')
+    
+    def test_redirects_to_detail_view_on_success(self):
+        login = self.client.login(username='test_user', password='some_password')
+        
+
+        data = {
+            'first_name': 'Javier',
+            'last_name': 'Rubio',
+            'date_of_birth': '2004-01-01',
+        }
+
+        response = self.client.post(reverse('author-create'), data=data)
+
+        author = Author.objects.filter(first_name='Javier', last_name='Rubio').first()
+        self.assertRedirects(response, reverse('author-detail', kwargs={'pk': author.pk}))
