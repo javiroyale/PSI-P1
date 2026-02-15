@@ -15,15 +15,13 @@ import dj_database_url
 import os
 from dotenv import load_dotenv
 
-POSTGRESQL_URL = 'postgres://alumnodb:alumnodb@localhost:5432/psi'
-
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-env_path = load_dotenv(os.path.join(BASE_DIR, '.p1_env'))
-load_dotenv(env_path)
+env_path = load_dotenv(os.path.join(BASE_DIR, '.env'))
+
 POSTGRESQL_URL = os.getenv('POSTGRESQL_URL')
-NEON_URL = os.getenv('DATABASE_URL')
+NEON_URL = os.getenv('NEON_URL')
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
@@ -35,26 +33,11 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 
 DEBUG = os.getenv('DEBUG', '0').lower() in ['true', 't', '1']
 
-# ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', '127.0.0.1').split(' ')
-
 ALLOWED_HOSTS = [
     ".onrender.com",
     "localhost",
     "127.0.0.1",
 ]
-
-# ALLOWED_HOSTS = []
-
-# SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY',
-# 'django-insecure-&psk#na5l=p3q8_a+-$4w1f^lt3lx1c@d*p4x$ymm_rn7pwb87')
-
-# SECURITY WARNING: don't run with debug turned on in production!
-# DEBUG = True
-
-# DEBUG = os.environ.get('DJANGO_DEBUG', '') != 'False'
-
-
-# Application definition
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -64,6 +47,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'catalog.apps.CatalogConfig',
+    'django_extensions',
 ]
 
 MIDDLEWARE = [
@@ -96,25 +80,24 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'locallibrary.wsgi.application'
 
-
-# Database
-# https://docs.djangoproject.com/en/5.2/ref/settings/#databases
-
 DATABASES = {
     "default": {}
 }
 
-if "TESTING" in os.environ:
-    DATABASES["default"] = dj_database_url.config(
-        default=os.getenv("POSTGRESQL_URL"),
+IS_TESTING = os.getenv('TESTING', '0').lower() in ['1', 'true', 't']
+
+if IS_TESTING:
+    db_from_env = dj_database_url.config(
+        default=POSTGRESQL_URL,
         conn_max_age=500,
     )
 else:
-    DATABASES["default"] = dj_database_url.config(
-        default=os.getenv("NEON_URL"),
+    db_from_env = dj_database_url.config(
+        default=NEON_URL,
         conn_max_age=500,
     )
 
+DATABASES["default"].update(db_from_env)
 
 # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
@@ -165,13 +148,6 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 LOGIN_REDIRECT_URL = '/'
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-
-if 'DATABASE_URL' in os.environ:
-    DATABASES['default'] = dj_database_url.config(
-        conn_max_age=500,
-        conn_health_checks=True,
-    )
-
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
