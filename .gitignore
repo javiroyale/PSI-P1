@@ -4,3 +4,6 @@ venv/
 p1_env/
 env/
 enunciado.pdf
+staticfiles/
+staticfiles
+*.pyc
