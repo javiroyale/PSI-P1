@@ -31,4 +31,4 @@ class AuthorModelTest(TestCase):
     def test_get_absolute_url(self):
         author = Author.objects.all()[0]
         # Ponemos un 3 porque ya tenemos 2 autores en la BD
-        self.assertEqual(author.get_absolute_url(), '/catalog/author/3')
+        self.assertEqual(author.get_absolute_url(), '/catalog/author/' + str(author.id))

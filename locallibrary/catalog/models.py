@@ -27,10 +27,6 @@ class Genre(models.Model):
         """String for representing the Model object."""
         return self.name
 
-    def get_absolute_url(self):
-        """Returns the url to access a particular genre instance."""
-        return reverse('genre-detail', args=[str(self.id)])
-
     class Meta:
         constraints = [
             UniqueConstraint(
@@ -166,10 +162,6 @@ class Language(models.Model):
                 "(case insensitive match)"
             ),
         ]
-
-    def get_absolute_url(self):
-        """Returns the URL to access a particular author instance."""
-        return reverse('language-detail', args=[str(self.id)])
 
     def __str__(self):
         """String for representing the Model object."""

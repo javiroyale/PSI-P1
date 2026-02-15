@@ -25,20 +25,20 @@ load_dotenv(env_path)
 
 # SECURITY WARNING: keep the secret key used in production secret!
 # SECRET_KEY = 'django-insecure-w688_iexyt!gyx8hx2defo8y=d^js$dpq0z2qg&kk1k095uh$%'
-SECRET_KEY = os.getenv('SECRET_KEY')
+#SECRET_KEY = os.getenv('SECRET_KEY')
 
-DEBUG = os.getenv('DEBUG', '0').lower() in ['true', 't', '1']
+#DEBUG = os.getenv('DEBUG', '0').lower() in ['true', 't', '1']
 
-ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS').split(' ')
+#ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS').split(' ')
 
-# SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'django-insecure-&psk#na5l=p3q8_a+-$4w1f^lt3lx1c@d*p4x$ymm_rn7pwb87')
+SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'django-insecure-&psk#na5l=p3q8_a+-$4w1f^lt3lx1c@d*p4x$ymm_rn7pwb87')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 # DEBUG = True
 
-# DEBUG = os.environ.get('DJANGO_DEBUG', '') != 'False'
+DEBUG = os.environ.get('DJANGO_DEBUG', '') != 'False'
 
-# ALLOWED_HOSTS = []
+ALLOWED_HOSTS = []
 
 
 # Application definition

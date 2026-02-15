@@ -154,7 +154,6 @@ class AuthorDelete(PermissionRequiredMixin, DeleteView):
                 reverse("author-delete", kwargs={"pk": self.object.pk})
             )
 
-
 class BookCreate(PermissionRequiredMixin, CreateView):
     model = Book
     fields = ['title', 'author', 'summary', 'isbn', 'genre', 'language',]
