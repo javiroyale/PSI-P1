@@ -15,6 +15,11 @@ import dj_database_url
 import os
 from dotenv import load_dotenv
 
+POSTGRESQL_URL = 'postgres://alumnodb:alumnodb@localhost:5432/psi'
+NEON_URL = 'postgresql://neondb_owner:npg_BV7qmftMLdk0@ep-quiet-truth'
+'-aisajy2o-pooler.c-4.us-east-1.aws.'
+'neon.tech/psi?sslmode=require&channel_binding=require'
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -24,21 +29,24 @@ load_dotenv(env_path)
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-# SECRET_KEY = 'django-insecure-w688_iexyt!gyx8hx2defo8y=d^js$dpq0z2qg&kk1k095uh$%'
+# SECRET_KEY = 'django-insecure-w688_iexyt!
+# gyx8hx2defo8y=d^js$dpq0z2qg&kk1k095uh$%'
+
 SECRET_KEY = os.getenv('SECRET_KEY')
 
 DEBUG = os.getenv('DEBUG', '0').lower() in ['true', 't', '1']
 
-ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS').split(' ')
+ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', '127.0.0.1').split(' ')
 
-# SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'django-insecure-&psk#na5l=p3q8_a+-$4w1f^lt3lx1c@d*p4x$ymm_rn7pwb87')
+# ALLOWED_HOSTS = []
+
+# SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY',
+# 'django-insecure-&psk#na5l=p3q8_a+-$4w1f^lt3lx1c@d*p4x$ymm_rn7pwb87')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 # DEBUG = True
 
 # DEBUG = os.environ.get('DJANGO_DEBUG', '') != 'False'
-
-# ALLOWED_HOSTS = []
 
 
 # Application definition
@@ -50,7 +58,6 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    
     'catalog.apps.CatalogConfig',
 ]
 
@@ -107,16 +114,20 @@ DATABASES['default'].update(db_from_env)
 
 AUTH_PASSWORD_VALIDATORS = [
     {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+        'NAME': 'django.contrib.auth.password_'
+        'validation.UserAttributeSimilarityValidator',
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+        'NAME': 'django.contrib.auth.password_'
+        'validation.MinimumLengthValidator',
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
+        'NAME': 'django.contrib.auth.password_'
+        'validation.CommonPasswordValidator',
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
+        'NAME': 'django.contrib.auth.password_'
+        'validation.NumericPasswordValidator',
     },
 ]
 
@@ -148,9 +159,6 @@ LOGIN_REDIRECT_URL = '/'
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
-# Update database configuration from $DATABASE_URL environment variable (if defined)
-import dj_database_url
-
 if 'DATABASE_URL' in os.environ:
     DATABASES['default'] = dj_database_url.config(
         conn_max_age=500,
@@ -161,10 +169,12 @@ if 'DATABASE_URL' in os.environ:
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
-# The absolute path to the directory where collectstatic will collect static files for deployment.
+# The absolute path to the directory where
+# collectstatic will collect static files for deployment.
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 
-# The URL to use when referring to static files (where they will be served from)
+# The URL to use when referring to static
+# files (where they will be served from)
 STATIC_URL = '/static/'
 
 # Static file serving.
@@ -175,3 +185,17 @@ STORAGES = {
         "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
     },
 }
+
+DEFAULT_FILE_STORAGE = 'django.core.files.storage.FileSystemStorage'
+
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestSta3cFilesStorage'
+
+# To use local PostgreSQL and run the tests, just export TESTING=1
+# To use NEON, just unset TESTING
+# To see the current value of TESTING just type echo $TESTING
+if 'TESTING' in os.environ:
+    db_from_env = dj_database_url.config(default=POSTGRESQL_URL,
+                                         conn_max_age=500)
+else:
+    db_from_env = dj_database_url.config(default=NEON_URL,
+                                         conn_max_age=500)
