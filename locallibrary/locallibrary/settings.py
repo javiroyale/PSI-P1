@@ -26,7 +26,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 env_path = load_dotenv(os.path.join(BASE_DIR, '.p1_env'))
 load_dotenv(env_path)
 POSTGRESQL_URL = os.getenv('POSTGRESQL_URL')
-NEON_URL = os.getenv('NEON_URL')
+NEON_URL = os.getenv('DATABASE_URL')
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
