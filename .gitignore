@@ -9,3 +9,5 @@ staticfiles
 *.pyc
 .env
 env
+__pycache__/
+.coverage
