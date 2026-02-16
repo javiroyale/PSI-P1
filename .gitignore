@@ -7,3 +7,5 @@ enunciado.pdf
 staticfiles/
 staticfiles
 *.pyc
+.env
+env

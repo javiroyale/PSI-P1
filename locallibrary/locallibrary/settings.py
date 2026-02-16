@@ -18,30 +18,26 @@ from dotenv import load_dotenv
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-env_path = load_dotenv(os.path.join(BASE_DIR, '.p1_env'))
-load_dotenv(env_path)
+env_path = load_dotenv(os.path.join(BASE_DIR, '.env'))
+
+POSTGRESQL_URL = os.getenv('POSTGRESQL_URL')
+NEON_URL = os.getenv('NEON_URL')
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-# SECRET_KEY = 'django-insecure-w688_iexyt!gyx8hx2defo8y=d^js$dpq0z2qg&kk1k095uh$%'
-#SECRET_KEY = os.getenv('SECRET_KEY')
+# SECRET_KEY = 'django-insecure-w688_iexyt!
+# gyx8hx2defo8y=d^js$dpq0z2qg&kk1k095uh$%'
+
+SECRET_KEY = os.getenv('SECRET_KEY')
 
 #DEBUG = os.getenv('DEBUG', '0').lower() in ['true', 't', '1']
 
-#ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS').split(' ')
-
-SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'django-insecure-&psk#na5l=p3q8_a+-$4w1f^lt3lx1c@d*p4x$ymm_rn7pwb87')
-
-# SECURITY WARNING: don't run with debug turned on in production!
-# DEBUG = True
-
-DEBUG = os.environ.get('DJANGO_DEBUG', '') != 'False'
-
-ALLOWED_HOSTS = []
-
-
-# Application definition
+ALLOWED_HOSTS = [
+    ".onrender.com",
+    "localhost",
+    "127.0.0.1",
+]
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -50,8 +46,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    
     'catalog.apps.CatalogConfig',
+    'django_extensions',
 ]
 
 MIDDLEWARE = [
@@ -84,39 +80,44 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'locallibrary.wsgi.application'
 
-
-# Database
-# https://docs.djangoproject.com/en/5.2/ref/settings/#databases
-
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
+    "default": {}
 }
 
-db_from_env = dj_database_url.config(
-    default='postgres://alumnodb:alumnodb@localhost:5432/psi',
-    conn_max_age=500)
+IS_TESTING = os.getenv('TESTING', '0').lower() in ['1', 'true', 't']
 
-DATABASES['default'].update(db_from_env)
+if IS_TESTING:
+    db_from_env = dj_database_url.config(
+        default=POSTGRESQL_URL,
+        conn_max_age=500,
+    )
+else:
+    db_from_env = dj_database_url.config(
+        default=NEON_URL,
+        conn_max_age=500,
+    )
 
+DATABASES["default"].update(db_from_env)
 
 # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [
     {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+        'NAME': 'django.contrib.auth.password_'
+        'validation.UserAttributeSimilarityValidator',
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+        'NAME': 'django.contrib.auth.password_'
+        'validation.MinimumLengthValidator',
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
+        'NAME': 'django.contrib.auth.password_'
+        'validation.CommonPasswordValidator',
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
+        'NAME': 'django.contrib.auth.password_'
+        'validation.NumericPasswordValidator',
     },
 ]
 
@@ -148,23 +149,15 @@ LOGIN_REDIRECT_URL = '/'
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
-# Update database configuration from $DATABASE_URL environment variable (if defined)
-import dj_database_url
-
-if 'DATABASE_URL' in os.environ:
-    DATABASES['default'] = dj_database_url.config(
-        conn_max_age=500,
-        conn_health_checks=True,
-    )
-
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
-# The absolute path to the directory where collectstatic will collect static files for deployment.
+# The absolute path to the directory where
+# collectstatic will collect static files for deployment.
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 
-# The URL to use when referring to static files (where they will be served from)
+# The URL to use when referring to static
+# files (where they will be served from)
 STATIC_URL = '/static/'
 
 # Static file serving.
@@ -175,3 +168,9 @@ STORAGES = {
         "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
     },
 }
+
+STATICFILES_STORAGE = (
+    "whitenoise.storage.CompressedManifestStaticFilesStorage"
+)
+
+DEFAULT_FILE_STORAGE = "django.core.files.storage.FileSystemStorage"
