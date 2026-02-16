@@ -11,3 +11,4 @@ staticfiles
 env
 __pycache__/
 .coverage
+*.zip
