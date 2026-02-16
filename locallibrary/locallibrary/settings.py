@@ -34,7 +34,7 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 DEBUG = os.getenv('DEBUG', '0').lower() in ['true', 't', '1']
 
 ALLOWED_HOSTS = [
-    "https://p1-05-2312-2026-1.onrender.com/",
+    "p1-05-2312-2026-1.onrender.com",
     "localhost",
     "127.0.0.1",
 ]
