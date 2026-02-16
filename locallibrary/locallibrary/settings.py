@@ -31,7 +31,7 @@ NEON_URL = os.getenv('NEON_URL')
 
 SECRET_KEY = os.getenv('SECRET_KEY')
 
-#DEBUG = os.getenv('DEBUG', '0').lower() in ['true', 't', '1']
+DEBUG = os.getenv('DEBUG', '0').lower() in ['true', 't', '1']
 
 ALLOWED_HOSTS = [
     ".onrender.com",

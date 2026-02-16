@@ -17,4 +17,3 @@ if not User.objects.filter(username=USERNAME).exists():
         email=EMAIL,
         password=PASSWORD,
     )
-
